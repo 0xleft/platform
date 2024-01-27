@@ -151,4 +151,6 @@ static inline uint32_t random() {
 
 }
 
+#include <eadkpp_extended.h>
+
 #endif
