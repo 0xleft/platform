@@ -14,9 +14,12 @@ src = $(addprefix src/,\
   main.cpp \
 )
 
-CPPFLAGS = -std=c++11 -fno-exceptions
+CPPFLAGS = -std=c++11 -fno-exceptions -Wunused-function
 CPPFLAGS += -Os # choose O2 or O3 for better performance in exchange for larger binary
 CPPFLAGS += -Wall -Iinclude
+
+CPPFLAGS += -Isrc
+
 CPPFLAGS += $(shell $(NWLINK) eadk-cflags)
 LDFLAGS = -Wl,--relocatable
 LDFLAGS += -nostartfiles
@@ -32,8 +35,10 @@ ifeq ($(LTO),1)
 CPPFLAGS += -flto -fno-fat-lto-objects
 CPPFLAGS += -fwhole-program
 CPPFLAGS += -fvisibility=internal
-LDFLAGS += -flinker-output=nolto-rel
+LDFLAGS += -flinker-output=nolto-rel -lm
 endif
+
+LDFLAGS_END += -lm
 
 .PHONY: build
 build: $(BUILD_DIR)/nwapp.bin
@@ -49,7 +54,7 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.nwa
 
 $(BUILD_DIR)/nwapp.nwa: $(call object_for,$(src)) $(BUILD_DIR)/icon.o
 	@echo "LD      $@"
-	$(Q) $(CC) $(CPPFLAGS) $(LDFLAGS) $^ -o $@
+	$(Q) $(CC) $(CPPFLAGS) $(LDFLAGS) $^ $(LDFLAGS_END) -o $@
 
 $(addprefix $(BUILD_DIR)/,%.o): %.cpp | $(BUILD_DIR)
 	@echo "CXX     $^"

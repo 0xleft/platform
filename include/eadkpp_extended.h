@@ -10,32 +10,41 @@
 
 namespace EADK
 {
+
+namespace Utils {
+
+// return the value between a and b at t
+static inline float lerp(float a, float b, float t) {
+    return a + (b - a) * t;
+};
+
+} // namespace Utils
+
 namespace Display
 {
 
 static void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color)
 {
+    if (x + width > Screen::Width || y + height > Screen::Height) return;
     eadk_rect_t rect = {x, y, width, height};
     eadk_display_push_rect_uniform(rect, color);
 };
 
-static void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color color)
+static void drawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, Color color)
 {
-    uint16_t dx = x2 - x1;
-    uint16_t dy = y2 - y1;
-    uint16_t steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
-    float xInc = dx / (float)steps;
-    float yInc = dy / (float)steps;
-    float x = x1;
-    float y = y1;
+    int16_t dx = abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
+    int16_t dy = -abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
+    int16_t err = dx + dy, e2;
 
-    for (uint16_t i = 0; i <= steps; i++)
+    while(true)
     {
-        drawRect(x, y, 1, 1, color);
-        x += xInc;
-        y += yInc;
+        drawRect(x1, y1, 1, 1, color);
+        if (x1 == x2 && y1 == y2) break;
+        e2 = 2 * err;
+        if (e2 >= dy) { err += dy; x1 += sx; }
+        if (e2 <= dx) { err += dx; y1 += sy; }
     }
-};
+}
 
 static void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color color, uint16_t width) {
     // but with width
@@ -45,46 +54,44 @@ static void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color c
 };
 
 static void drawCircle(uint16_t x, uint16_t y, uint16_t radius, Color color, bool fill = false) {
-    uint16_t x0 = 0;
-    uint16_t y0 = radius;
-    uint16_t d = 3 - 2 * radius;
+    // https://stackoverflow.com/questions/1201200/fast-algorithm-for-drawing-filled-circles
     if (fill) {
-        while (y0 >= x0) // only formulate 1/8 of circle
-        {
-            drawLine(x - x0, y - y0, x + x0, y - y0, color);
-            drawLine(x - y0, y - x0, x + y0, y - x0, color);
-            drawLine(x - x0, y + y0, x + x0, y + y0, color);
-            drawLine(x - y0, y + x0, x + y0, y + x0, color);
-            if (d < 0) {
-                d += 4 * x0++ + 6;
-            } else {
-                d += 4 * (x0++ - y0--) + 10;
-            }
+        for (uint16_t i = 0; i < radius; i++) {
+            drawCircle(x, y, radius - i, color);
         }
     } else {
-        while (y0 >= x0) // only formulate 1/8 of circle
-        {
-            drawRect(x + x0, y + y0, 1, 1, color);
-            drawRect(x + y0, y + x0, 1, 1, color);
-            drawRect(x + y0, y - x0, 1, 1, color);
-            drawRect(x + x0, y - y0, 1, 1, color);
-            drawRect(x - x0, y - y0, 1, 1, color);
-            drawRect(x - y0, y - x0, 1, 1, color);
-            drawRect(x - y0, y + x0, 1, 1, color);
-            drawRect(x - x0, y + y0, 1, 1, color);
-            if (d < 0) {
-                d += 4 * x0++ + 6;
-            } else {
-                d += 4 * (x0++ - y0--) + 10;
-            }
-        }
-    }
-};
+        int16_t f = 1 - radius;
+        int16_t ddF_x = 1;
+        int16_t ddF_y = -2 * radius;
+        int16_t x1 = 0;
+        int16_t y1 = radius;
 
-static void drawCircle(uint16_t x, uint16_t y, uint16_t radius, Color color, uint16_t width) {
-    // but with width
-    for (uint16_t i = 0; i < width; i++) {
-        drawCircle(x, y, radius + i, color);
+        drawRect(x, y + radius, 1, 1, color);
+        drawRect(x, y - radius, 1, 1, color);
+        drawRect(x + radius, y, 1, 1, color);
+        drawRect(x - radius, y, 1, 1, color);
+
+        while(x1 < y1)
+        {
+            if(f >= 0)
+            {
+                y1--;
+                ddF_y += 2;
+                f += ddF_y;
+            }
+            x1++;
+            ddF_x += 2;
+            f += ddF_x;
+
+            drawRect(x + x1, y + y1, 1, 1, color);
+            drawRect(x - x1, y + y1, 1, 1, color);
+            drawRect(x + x1, y - y1, 1, 1, color);
+            drawRect(x - x1, y - y1, 1, 1, color);
+            drawRect(x + y1, y + x1, 1, 1, color);
+            drawRect(x - y1, y + x1, 1, 1, color);
+            drawRect(x + y1, y - x1, 1, 1, color);
+            drawRect(x - y1, y - x1, 1, 1, color);
+        }
     }
 };
 
@@ -113,17 +120,6 @@ static void drawTriangle(uint16_t x, uint16_t y, uint16_t angle, uint16_t size, 
     // but with width
     for (uint16_t i = 0; i < width; i++) {
         drawTriangle(x, y, angle, size + i, color);
-    }
-};
-
-static void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color, bool fill)
-{
-    if (fill) {
-        for (uint16_t i = 0; i < height; i++) {
-            drawLine(x, y + i, x + width, y + i, color);
-        }
-    } else {
-        drawRect(x, y, width, height, color);
     }
 };
 
