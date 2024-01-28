@@ -15,9 +15,24 @@ int main(int argc, char * argv[]) {
 
 	platform::drawLines();
 
-	platform::Game game = platform::Game(1, 1000);
+	platform::Game game = platform::Game(3, 1000);
 	for (int i = 0; i < 4; i++) {
-		platform::Button button = platform::Button(300 + i * 100, platform::Row::FIRST);
+		platform::Button* button = new platform::Button(300 + i * 100, platform::Row::FIRST);
+		game.addButton(button);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		platform::Button* button = new platform::Button(300 + i * 100, platform::Row::SECOND);
+		game.addButton(button);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		platform::Button* button = new platform::Button(300 + i * 100, platform::Row::THIRD);
+		game.addButton(button);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		platform::Button* button = new platform::Button(300 + i * 100, platform::Row::FOURTH);
 		game.addButton(button);
 	}
 

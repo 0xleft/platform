@@ -32,3 +32,4 @@ target
 *.exe
 *.out
 *.app
+.vscode/settings.json
