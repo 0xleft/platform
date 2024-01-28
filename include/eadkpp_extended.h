@@ -7,6 +7,7 @@
 #include <vector>
 // include sprintf
 #include <stdio.h>
+#include <string.h>
 
 // for drawing more complex shapes like circles and triangles
 
@@ -20,12 +21,23 @@ static inline float lerp(float a, float b, float t) {
     return a + (b - a) * t;
 };
 
+// return the value between a and b at t
 static inline const char* numberToString(int number) {
     int numDigits = number == 0 ? 1 : static_cast<int>(std::log10(std::abs(number))) + 1;
     static char* buffer = nullptr;
     delete[] buffer; // delete the old buffer
     buffer = new char[numDigits + 1]; // allocate a new buffer
     sprintf(buffer, "%d", number);
+    return buffer;
+};
+
+// remember to delete the buffer after using this
+static inline const char* concatChars(const char* a, const char* b) {
+    static char* buffer = nullptr;
+    delete[] buffer;
+    buffer = new char[strlen(a) + strlen(b) + 1];
+    strcpy(buffer, a);
+    strcat(buffer, b);
     return buffer;
 };
 
@@ -354,10 +366,37 @@ static void drawLetter(uint16_t x, uint16_t y, char letter, Color color, uint16_
     }
 };
 
+static void adjustCoordsString(uint16_t x, uint16_t y, uint16_t spacing, const char* string, uint16_t* xOut, uint16_t* yOut) {
+    uint16_t i = 0;
+    while (string[i] != '\0') {
+        i++;
+    }
+    *xOut = x - i * (10 + spacing) / 2;
+    *yOut = y - 5;
+};
+
 static void drawString(uint16_t x, uint16_t y, uint16_t spacing, const char* string, Color color, uint16_t size = 1) {
     uint16_t i = 0;
     while (string[i] != '\0') {
         drawLetter(x + i * (10 + spacing), y, string[i], color, size);
+        i++;
+    }
+};
+
+static void drawString(uint16_t x, uint16_t y, uint16_t spacing, const char* string, Color color, Color backGroundColor, uint16_t size = 1, int padding = 2, bool adjustCoords = true) {
+    // adjust coords
+    uint16_t xOut = x;
+    uint16_t yOut = y;
+    if (adjustCoords) adjustCoordsString(x, y, spacing, string, &xOut, &yOut);
+
+    uint16_t i = 0;
+    while (string[i] != '\0') {
+        i++;
+    }
+    drawRect(xOut - padding, yOut - padding, i * (10 + spacing) + padding * 2, 10 + padding * 2, backGroundColor);
+    i = 0;
+    while (string[i] != '\0') {
+        drawLetter(xOut + i * (10 + spacing), yOut, string[i], color, size);
         i++;
     }
 };

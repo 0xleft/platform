@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef Level_H
+#define Level_H
 
 #include <eadkpp_extended.h>
 #include <vector>
@@ -151,7 +151,7 @@ namespace platform
         EADK::Display::drawLine(0, EADK::Screen::Height - 30, EADK::Screen::Width, EADK::Screen::Height - 30, Black);
     }
 
-    class Game {
+    class Level {
     private:
         std::vector<Button*> firstRowButtons;
         std::vector<Button*> secondRowButtons;
@@ -167,7 +167,7 @@ namespace platform
         Button* thirdRowLastButton = nullptr;
         Button* fourthRowLastButton = nullptr;
     public:
-        Game(int speed, int maxTime) {
+        Level(int speed, int maxTime) {
             this->speed = speed;
             this->maxTime = maxTime;
         }
@@ -345,7 +345,7 @@ namespace platform
 	        }
         }
 
-        ~Game() {
+        ~Level() {
             for (Button* button : firstRowButtons) {
                 delete button;
             }
@@ -363,4 +363,4 @@ namespace platform
 
 } // namespace platform
 
-#endif // GAME_H
+#endif // Level_H
