@@ -5,6 +5,8 @@
 #include <eadk.h>
 #include <eadkpp.h>
 #include <vector>
+// include sprintf
+#include <stdio.h>
 
 // for drawing more complex shapes like circles and triangles
 
@@ -16,6 +18,15 @@ namespace Utils {
 // return the value between a and b at t
 static inline float lerp(float a, float b, float t) {
     return a + (b - a) * t;
+};
+
+static inline const char* numberToString(int number) {
+    int numDigits = number == 0 ? 1 : static_cast<int>(std::log10(std::abs(number))) + 1;
+    static char* buffer = nullptr;
+    delete[] buffer; // delete the old buffer
+    buffer = new char[numDigits + 1]; // allocate a new buffer
+    sprintf(buffer, "%d", number);
+    return buffer;
 };
 
 } // namespace Utils
@@ -126,6 +137,229 @@ static void drawTriangle(uint16_t x, uint16_t y, uint16_t angle, uint16_t size, 
 static void clear(Color color)
 {
     drawRect(0, 0, Screen::Width, Screen::Height, color);
+};
+
+static void drawLetter(uint16_t x, uint16_t y, char letter, Color color, uint16_t size = 1) {
+    // most amazing switch ever
+    switch (letter) {
+        case '1':
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            break;
+        case '2':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            drawLine(x, y + 5, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case '3':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            break;
+        case '4':
+            drawLine(x, y, x, y + 5, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            break;
+        case '5':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 5, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            break;
+        case '6':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            break;
+        case '7':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            break;
+        case '8':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y, color, size);
+            drawLine(x + 10, y, x, y, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            break;
+        case '9':
+            drawLine(x, y, x + 10, y, color, size);
+            // drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y, color, size);
+            drawLine(x + 10, y, x, y, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            drawLine(x, y, x, y + 5, color, size);
+            break;
+        case '0':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y, color, size);
+            drawLine(x + 10, y, x, y, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            break;
+        case 'A':
+            drawLine(x, y, x + 5, y + 10, color, size);
+            drawLine(x + 5, y + 10, x + 10, y, color, size);
+            drawLine(x + 2, y + 5, x + 8, y + 5, color, size);
+            break;
+        case 'B':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            drawLine(x, y + 5, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'C':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'D':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            break;
+        case 'E':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'F':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            break;
+        case 'G':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y + 5, color, size);
+            break;
+        case 'H':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            break;
+        case 'I':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 5, y, x + 5, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'J':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 5, y, x + 5, y + 10, color, size);
+            drawLine(x, y + 10, x + 5, y + 10, color, size);
+            break;
+        case 'K':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 5, x + 10, y, color, size);
+            drawLine(x, y + 5, x + 10, y + 10, color, size);
+            break;
+        case 'L':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'M':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x, y, x + 5, y + 5, color, size);
+            drawLine(x + 10, y, x + 5, y + 5, color, size);
+            break;
+        case 'N':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x, y, x + 10, y + 10, color, size);
+            break;
+        case 'O':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y, color, size);
+            break;
+        case 'P':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            break;
+        case 'Q':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x + 10, y, color, size);
+            drawLine(x + 5, y + 5, x + 10, y + 10, color, size);
+            break;
+        case 'R':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x, y + 5, color, size);
+            drawLine(x, y + 5, x + 10, y + 10, color, size);
+            break;
+        case 'S':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x, y, x, y + 5, color, size);
+            drawLine(x, y + 5, x + 10, y + 5, color, size);
+            drawLine(x + 10, y + 5, x + 10, y + 10, color, size);
+            drawLine(x + 10, y + 10, x, y + 10, color, size);
+            break;
+        case 'T':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 5, y, x + 5, y + 10, color, size);
+            break;
+        case 'U':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case 'V':
+            drawLine(x, y, x + 5, y + 10, color, size);
+            drawLine(x + 5, y + 10, x + 10, y, color, size);
+            break;
+        case 'W':
+            drawLine(x, y, x, y + 10, color, size);
+            drawLine(x + 10, y, x + 10, y + 10, color, size);
+            drawLine(x, y + 10, x + 5, y + 5, color, size);
+            drawLine(x + 10, y + 10, x + 5, y + 5, color, size);
+            break;
+        case 'X':
+            drawLine(x, y, x + 10, y + 10, color, size);
+            drawLine(x + 10, y, x, y + 10, color, size);
+            break;
+        case 'Y':
+            drawLine(x, y, x + 5, y + 5, color, size);
+            drawLine(x + 10, y, x + 5, y + 5, color, size);
+            drawLine(x + 5, y + 5, x + 5, y + 10, color, size);
+            break;
+        case 'Z':
+            drawLine(x, y, x + 10, y, color, size);
+            drawLine(x + 10, y, x, y + 10, color, size);
+            drawLine(x, y + 10, x + 10, y + 10, color, size);
+            break;
+        case ' ':
+            break;
+    }
+};
+
+static void drawString(uint16_t x, uint16_t y, uint16_t spacing, const char* string, Color color, uint16_t size = 1) {
+    uint16_t i = 0;
+    while (string[i] != '\0') {
+        drawLetter(x + i * (10 + spacing), y, string[i], color, size);
+        i++;
+    }
 };
 
 } // namespace Display
