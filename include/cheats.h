@@ -31,7 +31,9 @@ namespace std {
     }
 
 	void __throw_bad_alloc() {
+	}
 
+	void __throw_logic_error(char const*) {
 	}
 }
 

@@ -5,8 +5,9 @@
 #include <eadkpp.h>
 #include <eadkpp_extended.h>
 #include <palette.h>
-#include "game.h"
+#include "level.h"
 #include "songs.h"
+#include "loader.h"
 
 namespace platform {
 namespace windows {
@@ -15,6 +16,7 @@ enum class WindowType {
     SONG,
     WELCOME,
     SELECT_SONG,
+    SONG_END,
 };
 
 class WindowManager {
@@ -29,6 +31,8 @@ class WindowManager {
             while (true) {
                 EADK::Keyboard::State kbd = EADK::Keyboard::scan();
                 if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
+                    EADK::Display::clear(White);
+                    EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "LOADING", Black, White);
                     EADK::Timing::msleep(1000);
                     break;
                 }
@@ -65,6 +69,8 @@ class WindowManager {
                     songManager->drawSongList();
                 }
                 if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
+                    EADK::Display::clear(White);
+                    EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "LOADING...", Black, White);
                     EADK::Timing::msleep(1000);
                     break;
                 }
@@ -76,20 +82,20 @@ class WindowManager {
 
         void runSongWindow() {
             EADK::Display::clear(White);
-            EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "SONG", Black, White);
-            EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2 + 20, 2, "PRESS EXE TO CONTINUE", Black, White);
-
-            while (true) {
-                EADK::Keyboard::State kbd = EADK::Keyboard::scan();
-                if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
-                    EADK::Timing::msleep(1000);
-                    break;
-                }
-                if (kbd.keyDown(EADK::Keyboard::Key::Back)) {
-                    return;
-                }
-                EADK::Timing::msleep(10);
+            
+            platform::Level level = platform::Level(songManager->getSelectedSong().getSpeed(), songManager->getSelectedSong().getLength());
+            for (Button* button : platform::loader::load(songManager->getSelectedSong().getNotes())) {
+                level.addButton(button);
             }
+
+            level.play();
+
+            runLevelEndWindow(level);
+        }
+
+        void runLevelEndWindow(platform::Level& level) {
+            // display stats and stuff/
+            // todo
 
             runWindow<WindowType::SELECT_SONG>();
         }
