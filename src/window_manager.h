@@ -7,7 +7,6 @@
 #include <palette.h>
 #include "level.h"
 #include "songs.h"
-#include "loader.h"
 
 namespace platform {
 namespace windows {
@@ -84,7 +83,7 @@ class WindowManager {
             EADK::Display::clear(White);
             
             platform::Level level = platform::Level(songManager->getSelectedSong().getSpeed(), songManager->getSelectedSong().getLength());
-            for (Button* button : platform::loader::load(songManager->getSelectedSong().getNotes())) {
+            for (Button* button : songManager->getSelectedSong().getNotes()) {
                 level.addButton(button);
             }
 
