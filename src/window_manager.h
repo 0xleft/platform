@@ -86,7 +86,7 @@ class WindowManager {
             for (Button* button : songManager->getSelectedSong().getNotes()) {
                 level.addButton(button);
             }
-
+            level.setTime(songManager->getSelectedSong().getStart());
             level.play();
 
             runLevelEndWindow(level);

@@ -221,13 +221,22 @@ public:
             if (relativeTime > EADK::Screen::Height || relativeTime < EADK::Screen::Height - speed * 10 - 40) {
                 button->click(ClickType::WRONG);
                 streak = 0;
+                drawScore();
                 return;
             }
 
             button->click(ClickType::RIGHT);
             streak++;
             points += 100; // debatable
+            drawScore();
         }
+    }
+
+    void drawScore() {
+        char* score = "SCORE: ";
+        EADK::Display::drawString(10, 10, 3, score, Black, White, 1, 2, false);
+        char* streak = "STREAK";
+        EADK::Display::drawString(10, 30, 3, streak, Black, White, 1, 2, false);
     }
 
     void addButton(Button* button) {
@@ -256,12 +265,16 @@ public:
         return time;
     }
 
+    void setTime(int time) {
+        this->time = time;
+    }
+
     void step() {
         time += speed;
-        int firstRowTimeLatest = 4000;
-        int secondRowTimeLatest = 4000;
-        int thirdRowTimeLatest = 4000;
-        int fourthRowTimeLatest = 4000;
+        int firstRowTimeLatest = 999999999;
+        int secondRowTimeLatest = 999999999;
+        int thirdRowTimeLatest = 999999999;
+        int fourthRowTimeLatest = 999999999;
 
         for (Button* button : firstRowButtons) {
             button->clear(time, speed);

@@ -22,6 +22,7 @@ static inline float lerp(float a, float b, float t) {
 };
 
 // return the value between a and b at t
+// remember to delete the buffer after using this
 static inline const char* numberToString(int number) {
     int numDigits = number == 0 ? 1 : static_cast<int>(std::log10(std::abs(number))) + 1;
     static char* buffer = nullptr;
