@@ -20,7 +20,7 @@ open issue [here](https://github.com/0xleft/platform/issues)
 
 ## showcase
 
-![showcase](https://www.youtube.com/watch?v=rMdgILt4CZw)
+![showcase](https://www.youtube.com/embed/rMdgILt4CZw)
 
 ## why
 
