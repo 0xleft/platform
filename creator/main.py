@@ -28,12 +28,12 @@ def playThread():
     global time, shouldStop
     total = ""
     while not shouldStop:
-        t.sleep(0.01)
+        t.sleep(0.02)
         time += 10
         x = kbfunc() # will not wait for input
         if x:
             x = str(x)
-            total += f"{time};{x},"
+            total += f"new Button({time},{x}),"
     print(total[:-1])
 
 if __name__ == "__main__":

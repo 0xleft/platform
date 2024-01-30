@@ -232,6 +232,10 @@ public:
         }
     }
 
+    int getPoints() {
+        return points;
+    }
+
     void drawScore() {
         char* points_s = EADK::Utils::numberToString(this->points);
         char* points = EADK::Utils::concatChars("SCORE ", points_s);
@@ -370,8 +374,8 @@ public:
             if (kbd.keyDown(EADK::Keyboard::Key::LeftParenthesis)) {
                 pressButton<platform::Row::FOURTH>();
             }
-            if (kbd.keyDown(EADK::Keyboard::Key::Power)) {
-                return;
+            if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
+                break;
             }
 
             EADK::Timing::msleep(10);

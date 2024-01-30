@@ -32,7 +32,7 @@ class WindowManager {
                 if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
                     EADK::Display::clear(White);
                     EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "LOADING", Black, White);
-                    EADK::Timing::msleep(1000);
+                    EADK::Timing::msleep(300);
                     break;
                 }
                 if (kbd.keyDown(EADK::Keyboard::Key::Back)) {
@@ -46,7 +46,6 @@ class WindowManager {
 
         void runSelectSongWindow() {
             EADK::Display::clear(White);
-            EADK::Display::drawString(20, 20, 3, "SELECTED: NONE", Black, White, 1, 2, false);
             songManager->drawSongList();
 
             while (true) {
@@ -87,8 +86,27 @@ class WindowManager {
         }
 
         void runLevelEndWindow(platform::Level& level) {
-            // display stats and stuff/
-            // todo
+            EADK::Display::clear(White);
+            EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "LEVEL END", Black, White);
+            // score
+            char* score = EADK::Utils::numberToString(level.getPoints());
+            char* full = EADK::Utils::concatChars("POINTS: ", score);
+            EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2 + 20, 2, full, Black, White);
+            delete[] score;
+            delete[] full;
+
+            EADK::Timing::msleep(500);
+
+            while (true) {
+                EADK::Keyboard::State kbd = EADK::Keyboard::scan();
+                if (kbd.keyDown(EADK::Keyboard::Key::Back)) {
+                    EADK::Display::clear(White);
+                    EADK::Display::drawString(EADK::Screen::Width / 2, EADK::Screen::Height / 2, 3, "LOADING...", Black, White);
+                    EADK::Timing::msleep(1000);
+                    break;
+                }
+                EADK::Timing::msleep(10);
+            }
 
             runWindow<WindowType::SELECT_SONG>();
         }
