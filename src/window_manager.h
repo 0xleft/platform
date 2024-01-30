@@ -66,6 +66,9 @@ class WindowManager {
                     EADK::Timing::msleep(1000);
                     break;
                 }
+                if (kbd.keyDown(EADK::Keyboard::Key::Back)) {
+                    return;
+                }
                 EADK::Timing::msleep(100);
             }
 
