@@ -23,7 +23,7 @@ static inline float lerp(float a, float b, float t) {
 
 // return the value between a and b at t
 // remember to delete the buffer after using this
-static inline const char* numberToString(int number) {
+static inline char* numberToString(int number) {
     int numDigits = number == 0 ? 1 : static_cast<int>(std::log10(std::abs(number))) + 1;
     static char* buffer = nullptr;
     delete[] buffer; // delete the old buffer
@@ -33,7 +33,7 @@ static inline const char* numberToString(int number) {
 };
 
 // remember to delete the buffer after using this
-static inline const char* concatChars(const char* a, const char* b) {
+static inline char* concatChars(char* a, char* b) {
     static char* buffer = nullptr;
     delete[] buffer;
     buffer = new char[strlen(a) + strlen(b) + 1];

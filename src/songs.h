@@ -11,7 +11,7 @@ namespace platform {
 namespace songs {
     
 class Song {
-    const char* name;
+    char* name;
     int length = 0;
     int speed = 1;
     int start = 0;
@@ -25,7 +25,7 @@ class Song {
             this->notes = {};
         }
 
-        Song(const char* name, int start, int length, int speed, std::vector<Button*> notes) {
+        Song(char* name, int start, int length, int speed, std::vector<Button*> notes) {
             this->name = name;
             this->length = length;
             this->speed = speed;
@@ -37,7 +37,7 @@ class Song {
             return this->start;
         }
 
-        const char* getName() {
+        char* getName() {
             return this->name;
         }
 

@@ -54,7 +54,7 @@ class WindowManager {
                 if (kbd.keyDown(EADK::Keyboard::Key::Up)) {
                     EADK::Display::clear(White);
                     songManager->setSelectedSong(songManager->getSelectedSongIndex() - 1);
-                    const char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
+                    char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
                     EADK::Display::drawString(20, 20, 3, full, Black, White, 1, 2, false);
                     delete full;
                     songManager->drawSongList();
@@ -62,7 +62,7 @@ class WindowManager {
                 if (kbd.keyDown(EADK::Keyboard::Key::Down)) {
                     EADK::Display::clear(White);
                     songManager->setSelectedSong(songManager->getSelectedSongIndex() + 1);
-                    const char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
+                    char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
                     EADK::Display::drawString(20, 20, 3, full, Black, White, 1, 2, false);
                     delete full;
                     songManager->drawSongList();

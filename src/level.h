@@ -233,10 +233,11 @@ public:
     }
 
     void drawScore() {
-        char* score = "SCORE: ";
-        EADK::Display::drawString(10, 10, 3, score, Black, White, 1, 2, false);
-        char* streak = "STREAK";
-        EADK::Display::drawString(10, 30, 3, streak, Black, White, 1, 2, false);
+        char* points_s = EADK::Utils::numberToString(this->points);
+        char* points = EADK::Utils::concatChars("SCORE ", points_s);
+        EADK::Display::drawString(10, 10, 3, points, Black, White, 1, 2, false);
+        delete points_s;
+        delete points;
     }
 
     void addButton(Button* button) {
