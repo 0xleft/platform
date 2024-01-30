@@ -33,7 +33,7 @@ static inline char* numberToString(int number) {
 };
 
 // remember to delete the buffer after using this
-static inline char* concatChars(char* a, char* b) {
+static inline char* concatChars(const char* a, const char* b) {
     static char* buffer = nullptr;
     delete[] buffer;
     buffer = new char[strlen(a) + strlen(b) + 1];

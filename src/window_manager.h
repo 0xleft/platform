@@ -54,17 +54,11 @@ class WindowManager {
                 if (kbd.keyDown(EADK::Keyboard::Key::Up)) {
                     EADK::Display::clear(White);
                     songManager->setSelectedSong(songManager->getSelectedSongIndex() - 1);
-                    char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
-                    EADK::Display::drawString(20, 20, 3, full, Black, White, 1, 2, false);
-                    delete full;
                     songManager->drawSongList();
                 }
                 if (kbd.keyDown(EADK::Keyboard::Key::Down)) {
                     EADK::Display::clear(White);
                     songManager->setSelectedSong(songManager->getSelectedSongIndex() + 1);
-                    char* full = EADK::Utils::concatChars("SELECTED: ", songManager->getSelectedSong().getName());
-                    EADK::Display::drawString(20, 20, 3, full, Black, White, 1, 2, false);
-                    delete full;
                     songManager->drawSongList();
                 }
                 if (kbd.keyDown(EADK::Keyboard::Key::EXE)) {
@@ -82,11 +76,11 @@ class WindowManager {
         void runSongWindow() {
             EADK::Display::clear(White);
             
-            platform::Level level = platform::Level(songManager->getSelectedSong().getSpeed(), songManager->getSelectedSong().getLength());
-            for (Button* button : songManager->getSelectedSong().getNotes()) {
+            platform::Level level = platform::Level(songManager->getSelectedSong()->getSpeed(), songManager->getSelectedSong()->getLength());
+            for (Button* button : songManager->getSelectedSong()->getNotes()) {
                 level.addButton(button);
             }
-            level.setTime(songManager->getSelectedSong().getStart());
+            level.setTime(songManager->getSelectedSong()->getStart());
             level.play();
 
             runLevelEndWindow(level);
